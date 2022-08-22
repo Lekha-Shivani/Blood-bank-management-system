@@ -1,0 +1,665 @@
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+
+
+using namespace std;
+int checker;
+int t=0;
+
+void exitProg()
+{
+	system("clear");
+	cout<<"\n\n\n\n\t\t\t THANK YOU";
+	cout<<"\n\n\t\t\t ctrl+s Blood";
+ 
+}
+
+
+typedef struct donor *List;
+struct donor
+{
+string name;
+string btype;
+string phone;
+string city;
+string email;
+struct donor *next;
+};
+
+
+void storeRecord(List l)
+{
+	ofstream Rfout;
+	int t,s=1;
+	string title,line;
+
+	Rfout.open ("records.txt", std::ios_base::app);
+	if(t==0)
+	{
+		Rfout<<"\n"<<left<<setw(5)<<"No."<<left<<setw(15)<<"NAME"<<left<<setw(15)<<"BLOOD TYPE";
+		Rfout<<left<<setw(15)<<"PHONE"<<left<<setw(20)<<"EMAIL"<<left<<setw(15)<<"CITY"<<endl;
+		t++;
+	}
+
+	struct donor *p = l->next;
+	while (p != NULL)
+      {
+      	Rfout<<"\n"<<left<<setw(5)<<s;
+		Rfout<<left<<setw(15)<<p->name;
+		Rfout<<left<<setw(15)<<p->btype;
+		Rfout<<left<<setw(15)<<p->phone;
+		Rfout<<left<<setw(20)<<p->email;
+		Rfout<<left<<setw(15)<<p->city;
+
+      p = p->next;
+      s++;
+        }
+
+
+	Rfout.close();
+	ifstream Rfin;
+
+	Rfin.open("records.txt");
+	while (Rfin) {
+
+		getline(Rfin, line);
+		//cout << line << endl;
+	}
+
+	// Close the file
+	Rfin.close();
+
+}
+
+
+void Update (List l)
+{
+
+    remove("records.txt");
+	ofstream Rfout;
+	int t,s=1;
+	string title,line;
+
+	Rfout.open ("update.txt", std::ios_base::app);
+	if(t==0)
+	{
+		Rfout<<"\n"<<left<<setw(5)<<"No."<<left<<setw(15)<<"NAME"<<left<<setw(15)<<"BLOOD TYPE";
+		Rfout<<left<<setw(15)<<"PHONE"<<left<<setw(20)<<"EMAIL"<<left<<setw(15)<<"CITY"<<endl;
+		t++;
+	}
+
+	struct donor *p = l->next;
+	while (p != NULL)
+      {
+      	Rfout<<"\n"<<left<<setw(5)<<s;
+		Rfout<<left<<setw(15)<<p->name;
+		Rfout<<left<<setw(15)<<p->btype;
+		Rfout<<left<<setw(15)<<p->phone;
+		Rfout<<left<<setw(20)<<p->email;
+		Rfout<<left<<setw(15)<<p->city;
+
+      p = p->next;
+      s++;
+        }
+
+
+	Rfout.close();
+
+      rename("update.txt", "records.txt");   
+
+	ifstream Rfin;
+	Rfin.open("records.txt");
+	while (Rfin) {
+
+		getline(Rfin, line);
+		//cout << line << endl;
+	}
+
+	// Close the file
+	Rfin.close();
+
+}
+
+
+void Insert (string n,string b, string p,string c, string e,List l) 
+{
+  struct donor *TmpCell;
+  TmpCell = new donor;
+  TmpCell->name = n;
+  TmpCell->btype = b;
+  TmpCell->phone = p;
+  TmpCell->city = c;
+  TmpCell->email = e;
+  TmpCell->next = l->next;
+  l->next = TmpCell;
+
+ }
+
+
+void Deletion(donor*& head, string n, string b)
+{
+     
+    // Check if list is empty or we reach at the end of the list
+    
+    if (head == NULL) {
+        cout << "Element not present in the list\n";
+        return;
+    }
+    
+    // If current node is the node to be deleted
+    if ((head->name == n)&&(head->btype == b)){
+        donor* t = head;
+        head = head->next; // If it's start of the node head
+                           // node points to second node
+        delete (t); // Else changes previous node's link to
+                    // current node's link
+        return;
+    }
+
+    Deletion(head->next,n,b);
+}
+
+
+void Display (List l) 
+{
+  int s=1;  system("clear");
+  cout << "\n"<<setw(40)<<"DONOR RECORD\n";
+  cout<<"\n"<<left<<setw(5)<<"No."<<left<<setw(15)<<"NAME"<<left<<setw(15)<<"BLOOD TYPE";
+  cout<<left<<setw(15)<<"PHONE"<<left<<setw(20)<<"EMAIL"<<left<<setw(15)<<"CITY"<<endl;
+
+
+  struct donor *p = l->next;
+  while (p != NULL)
+        {
+      cout<<"\n"<<left<<setw(5)<<s;
+	cout<<left<<setw(15)<<p->name;
+	cout<<left<<setw(15)<<p->btype;
+	cout<<left<<setw(15)<<p->phone;
+	cout<<left<<setw(20)<<p->email;
+	cout<<left<<setw(15)<<p->city;
+
+
+      p = p->next;
+      s++;
+        }
+ }
+
+void searchName(donor* head, string x)
+{
+	int flag=0,once;
+	donor* current = head; // Initialize current
+	while (current != NULL)
+	{
+		if (current->name == x)
+	      {
+
+			 if(once==0)
+			 {		
+			   cout << "\n\t\tDonor Record\n";
+			   cout<<"\n"<<left<<setw(5)<<"No."<<left<<setw(15)<<"NAME"<<left<<setw(15)<<"BLOOD TYPE";
+			   cout<<left<<setw(15)<<"PHONE"<<left<<setw(20)<<"EMAIL"<<left<<setw(15)<<"CITY"<<endl;
+
+			   once++;
+			 }
+
+		      cout<<"\n"<<left<<setw(5)<<"~";
+
+			cout<<left<<setw(15)<<current->name;
+			cout<<left<<setw(15)<<current->btype;
+			cout<<left<<setw(15)<<current->phone;
+			cout<<left<<setw(20)<<current->email;
+			cout<<left<<setw(15)<<current->city<<endl;
+     			flag++;
+		}
+	
+		current = current->next;
+	}
+		if(flag ==0)
+		{
+			cout<<"\n\tRecord Not found";	
+		}
+
+}
+
+
+void searchBlood(donor* head, string x)
+{
+	int flag=0,once=0;
+	donor* current = head; // Initialize current
+	while (current != NULL)
+	{
+		if (current->btype == x)
+	      {
+			 if(once==0)
+			 {		
+			   cout << "\n\t\tDonor Record\n";
+			   cout<<"\n"<<left<<setw(5)<<"No."<<left<<setw(15)<<"NAME"<<left<<setw(15)<<"BLOOD TYPE";
+			   cout<<left<<setw(15)<<"PHONE"<<left<<setw(20)<<"EMAIL"<<left<<setw(15)<<"CITY"<<endl;
+
+			   once++;
+			 }
+
+  			
+		      cout<<"\n"<<left<<setw(5)<<"~";
+
+			cout<<left<<setw(15)<<current->name;
+			cout<<left<<setw(15)<<current->btype;
+			cout<<left<<setw(15)<<current->phone;
+			cout<<left<<setw(20)<<current->email;
+			cout<<left<<setw(15)<<current->city<<endl;	
+			 			 flag++;
+		}
+
+		current = current->next;
+	}
+		if(flag ==0)
+		{
+			cout<<"\n\tRecord Not found";	
+		}
+
+}
+
+
+void searchCity(donor* head, string x)
+{
+	int flag=0,once=0;
+	donor* current = head; // Initialize current
+	while (current != NULL)
+	{
+		if (current->city == x)
+	      {
+			 if(once==0)
+			 {		
+			   cout << "\n\t\tDonor Record\n";
+			   cout<<"\n"<<left<<setw(5)<<"No."<<left<<setw(15)<<"NAME"<<left<<setw(15)<<"BLOOD TYPE";
+			   cout<<left<<setw(15)<<"PHONE"<<left<<setw(20)<<"EMAIL"<<left<<setw(15)<<"CITY"<<endl;
+
+			   once++;
+			 }
+
+  			
+		      cout<<"\n"<<left<<setw(5)<<"~";
+
+			cout<<left<<setw(15)<<current->name;
+			cout<<left<<setw(15)<<current->btype;
+			cout<<left<<setw(15)<<current->phone;
+			cout<<left<<setw(20)<<current->email;
+			cout<<left<<setw(15)<<current->city<<endl;	
+			 			 flag++;
+		}
+
+		current = current->next;
+	}
+		if(flag ==0)
+		{
+			cout<<"\n\tRecord Not found";	
+		}
+
+}
+
+void ModificationP(donor*& head, string val, string ok, string po)
+{
+    // Check if list is empty or we reach at the end of the list
+    
+    if (head == NULL) {
+        cout << "Element not present in the list\n";
+        return;
+    }
+    
+    // If current node is the node to be modified
+    if ((head->name == val)&&(head->phone==ok)) {
+        head->phone = po;
+        return;
+    }
+    ModificationP(head->next, val, ok, po);
+}
+
+void ModificationE(donor*& head, string val, string ok, string po)
+{
+    // Check if list is empty or we reach at the end of the list
+    
+    if (head == NULL) {
+        cout << "Element not present in the list\n";
+        return;
+    }
+    
+    // If current node is the node to be modified
+    if ((head->name == val)&&(head->phone==ok)) {
+        head->email = po;
+        return;
+    }
+    ModificationE(head->next, val, ok, po);
+}
+
+void ModificationC(donor*& head, string val, string ok, string po)
+{
+    // Check if list is empty or we reach at the end of the list
+    
+    if (head == NULL) {
+        cout << "Element not present in the list\n";
+        return;
+    }
+    
+    // If current node is the node to be modified
+    if ((head->name == val)&&(head->phone==ok)) {
+        head->city = po;
+        return;
+    }
+    ModificationC(head->next, val, ok, po);
+}
+
+void ModificationA(donor*& head, string val, string ok, string po,string po1, string po2)
+{
+    // Check if list is empty or we reach at the end of the list
+    
+    if (head == NULL) {
+        cout << "Element not present in the list\n";
+        return;
+    }
+    
+    // If current node is the node to be modified
+    if ((head->name == val)&&(head->phone==ok)) {
+        head->phone = po;
+        head->city = po1;
+        head->email = po2;
+        return;
+    }
+    ModificationA(head->next, val, ok, po,po1,po2);
+}
+
+
+void application () 
+{
+  int ch,o,oo,opt;
+  string n,b,c,e,ph,upPhone,upMail,upCity;
+  string nameFind,nameDelete,nameModify,cityFind;;
+  string bloodFind,phoneModify,bloodDelete,phoneDelete;
+  List l;
+  l = new donor;
+  l->next = NULL;
+  List p = l;
+  menu:
+    do
+    {
+	cout<<"\n\n\t\t\tMAIN MENU\n";
+      cout << "\n\n\t1. INSERT \n\t2. DISPLAY \n\t3. SEARCH  \n\t4. EDIT \n\t5. QUIT\n\nEnter the choice : ";
+      cin >> ch;
+      switch (ch)
+    {
+     case 1:
+      p = l;
+
+	system("clear");
+      cout<<"\nEnter name::";
+      cin>>n;
+      cout<<"Enter phone number:: ";
+      cin>>ph;
+      cout <<"Enter City:: ";
+      cin >>c;
+      cout<<"Enter blood:: ";
+      cin>>b;
+      cout<<"Enter email:: ";
+      cin>>e;
+      Insert (n,b,ph,c,e,l);
+      storeRecord (l);
+      break;
+
+      case 2:
+      Display (l);
+      break;
+
+	case 3:
+      system("clear");
+	do
+      {
+
+		cout<<"\n\t\t\tSEARCH\n";
+      	cout << "\n\n\t1. Name \n\t2. Blood Type \n\t3. City  \n\t4. QUIT\n\nEnter the choice : ";
+	      cin >> o;
+      	switch (o)
+		 {
+		      case 1:
+		      cout<<"Enter Name:";
+			cin>>nameFind;
+		      searchName(l, nameFind);
+		      break;
+
+			case 2:
+			cout<<"Enter Blood Type:";
+			cin>>bloodFind;
+		      searchBlood(l, bloodFind);
+		      break;
+
+			case 3:
+			cout<<"Enter City:";
+			cin>>bloodFind;
+		      searchCity(l, cityFind);
+		      break;
+
+			case 4:
+			goto menu;
+			break;
+             }
+       }  while (ch < 4);
+      
+      case 4:
+      system("clear");
+	do
+      {
+
+		cout<<"\n\t\t\tEDIT\n";
+      	cout << "\n\n\t1. Modify Record \n\t2. Delete Record \n\t3. QUIT\n\nEnter the choice : ";
+	      cin >> oo;
+      	switch (oo)
+		 {
+		    case 1:
+			cout<<"MODIFY RECORD:";
+			cout<<"\n Enter name:";
+			cin>>nameModify;
+			cout<<"\n Enter phone number:";
+			cin>>phoneModify;
+			cout<<"\n Data to be modified:\n\t\t\t\t\t\t1. Phone \n\t\t\t\t\t\t2.City"; 
+			cout<<"\n\t\t\t\t\t\t3.Email \n\t\t\t\t\t\t4. All of the above \n\t\t\t\t\t\t5.QUIT";
+			cout<<"\nEnter option:";
+			cin>>opt;
+			    switch(opt)
+			    {
+			    case 1:
+			    system("clear");
+			    cout<<"Enter Phone:";
+			    cin>>upPhone;
+			    ModificationP(l,nameModify, phoneModify, upPhone);
+			    Update (l);
+		          break;
+                
+                	    case 2:
+	                system("clear");
+			    cout<<"Enter City:";
+			    cin>>upCity;
+			    ModificationC(l,nameModify, phoneModify, upCity);
+			    Update (l);
+		          break;
+                
+                	    case 3:
+	                system("clear");
+			    cout<<"Enter Email:";
+			    cin>>upMail;
+			    ModificationE(l,nameModify, phoneModify, upMail);
+			    Update (l);
+	     	          break;
+		        
+           	          case 4:
+		          system("clear");
+			    cout<<"Enter Phone:";
+			    cin>>upPhone;
+			    cout<<"Enter City:";
+			    cin>>upCity;
+			    cout<<"Enter Email:";
+			    cin>>upMail;
+			    ModificationA(l,nameModify, phoneModify, upPhone, upCity, upMail);
+			    Update (l);
+		          break;
+		        
+                      case 5:
+                      goto menu;
+                      break;
+			    }
+			break;	
+			    
+			case 2:
+			system("clear");	
+			cout<<"DELETE RECORD:";
+			cout<<"\n Enter name:";
+			cin>>nameDelete;
+			cout<<"Enter blood type:";
+			cin>>bloodDelete;
+			//cout<<"Enter phone number:";
+			//cin>>bloodDelete;
+			Deletion(l,nameDelete,bloodDelete);
+			cout<<"\n\nThe records have been deleted.";
+			Update (l);
+		      break;
+
+			case 3:
+			goto menu;
+			break;
+             }
+
+       }  while (oo < 3);
+
+
+      case 5: exitProg();
+      break;
+}
+ }  while (ch < 5);
+}
+
+
+int check; //global variable to flag check the authentication
+
+int compare(string check)
+{
+
+	string user, pword,line ;
+	int flag=0;
+	ifstream fin;
+	fin.open("user.txt");
+	while (fin) {
+
+		getline(fin, line);
+		if(check==line)
+		{
+			flag=1;
+			break;
+		}
+            
+	}
+
+	// Close the file
+	fin.close();
+	return flag;
+
+}
+
+
+void storeCredentials()
+{
+	// Creation of ofstream class object
+	ofstream fout;
+
+	string line,u1,u2,p1,p2, title;
+
+	u1 = "shivani";
+	u2 = "ritha";
+	
+	p1 = "snoop_y7";
+	p2 = "kiwi22";
+	
+	title = " User		Password\n";
+	fout.open ("user.txt", std::ios_base::app);
+	
+		fout << title << endl;
+		fout<<u1<<"\t\t"<<p1<<endl;
+		fout<<u2<<"\t\t"<<p2<<endl;
+
+	fout.close();
+	ifstream fin;
+
+	fin.open("user.txt");
+	while (fin) {
+
+		getline(fin, line);
+		//cout << line << endl;
+	}
+
+	// Close the file
+	fin.close();
+
+}
+
+
+void authentication()
+{
+
+	string user,pass,tab,l;
+	tab= "\t\t";
+
+	system("clear");
+	cout<<"\n\n\n\n\n\t\t\t LOGIN PAGE";
+	cout<<"\n\n\t User Name :";
+	cin>>user;
+
+	cout<<"\n\t Password  :";
+	cin>>pass;
+
+	l = user + tab + pass;
+	checker=compare(l);
+
+	if(checker)
+	cout<<"\n USER: "<<user;
+	else
+	cout<<"\n Inavlid user";
+	
+
+}
+
+
+
+int main()
+{
+
+	storeCredentials();
+	authentication();
+	checkUser:
+	string ans;
+	string y="yes";
+	string n="no";
+	if(checker==1)
+	{
+		system("clear");
+		application();
+	}
+	 
+ 	else  //if the credentials are wrong
+	{
+        system("clear");
+		cout<<"\n\n\n\t\t\t INVALID CREDENTIALS";
+		cout<<"\n\n Do you want to try again? (yes/no) :";
+		cin>>ans;
+		if(ans==y)
+		{
+			authentication(); //the  user gets to try their credentials again
+			goto checkUser;
+		}
+
+		else
+		{
+			exitProg();
+		}
+
+	}
+	return 0;
+
+}
+
